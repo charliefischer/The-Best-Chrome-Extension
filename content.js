@@ -13,6 +13,7 @@ var main = (icons) => {
   const url = window.location.href;
   const storedData = localStorage.getItem(url);
   const isNote = document.querySelector("p[aria-label='note']");
+
   if (storedData && !isNote) {
     const node = document.querySelector(".pv-top-card");
     const p = document.createElement("p");
@@ -22,9 +23,9 @@ var main = (icons) => {
     node.appendChild(p);
     return;
   }
+
   icons.forEach((icon) => {
     icon.parentElement.addEventListener("click", () => {
-      console.log("we have liftoff");
       icon.parentElement.style.background = "red";
       createForm(icon.parentElement);
     });
@@ -33,7 +34,8 @@ var main = (icons) => {
   var createForm = (button) => {
     const url = window.location.href;
     const storedData = localStorage.getItem(url);
-    const isNote = button.parentElement.parentElement.querySelector(
+    const grandparentNode = button.parentElement.parentElement
+    const isNote = grandparent.querySelector(
       "p[aria-label='note']"
     );
     if (storedData && !isNote) {
@@ -41,10 +43,24 @@ var main = (icons) => {
       p.innerHTML = storedData;
       p.ariaLabel = "note";
 
-      button.parentElement.parentElement.appendChild(p);
+      grandparent.appendChild(p);
       return;
     }
+    const node = document.querySelector(
+      "div[aria-labelledby='send-invite-modal']"
+    );
+    if(!node) {
+      return
+    }
     const form = document.createElement("form");
+    form.style.position = "fixed";
+    form.style.top = "50%";
+    form.style.left = "50%";
+    form.style.transform = "translate(-50%, -50%)";
+    form.style.background = "white";
+    form.style.width = "400px";
+    form.style["border-radius"] = "11px";
+    form.style.padding = "30px";
 
     const inputField = document.createElement("textarea");
     inputField.type = "textarea";
@@ -60,21 +76,10 @@ var main = (icons) => {
       handleSubmitClick(e, inputField)
     );
 
-    form.style.position = "fixed";
-    form.style.top = "50%";
-    form.style.left = "50%";
-    form.style.transform = "translate(-50%, -50%)";
-    form.style.background = "white";
-    form.style.width = "400px";
-    form.style["border-radius"] = "11px";
-    form.style.padding = "30px";
-
     form.appendChild(helperText);
     form.appendChild(inputField);
     form.appendChild(submitButton);
-    const node = document.querySelector(
-      "div[aria-labelledby='send-invite-modal']"
-    );
+
     node.appendChild(form);
   };
 };
